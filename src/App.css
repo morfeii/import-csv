@@ -34,17 +34,18 @@
   border-bottom: 2px solid #009879;
 }
 
-.no-data {
-  width: 500px;
-  height: 150px;
+.error {
+  width: 700px;
+  border: 1px solid #d8d8d8;
+  border-radius: 5px;
   margin: auto;
-  background-color: rgba(255, 0, 0, 0.534);
-  color: rgba(255, 255, 255, 0.952);
-  font-size: 40px;
-  line-height: 150px;
+  padding: 5px;
+  background-color: rgba(255, 249, 242);
+  color: rgba(211, 0, 0);
+  font-size: 24px;
   text-align: center;
 }
 
-.error {
+.invalid {
   background-color: #f4cccc;
 }

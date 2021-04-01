@@ -1,10 +1,24 @@
 import React from 'react'
 import classnames from 'classnames'
-import { isValidData, isCSV, isPhoneValid } from '../validators'
+import {
+  errorMessage,
+  isValidData,
+  isCSV,
+  isPhoneValid,
+  isEmailValid,
+  isAgeValid,
+  isExperienceValid,
+  isIncomeValid,
+  isHasChildren,
+  isStatesValid,
+  isExpDateValid,
+  isLicenseValid,
+  isMatch,
+} from '../validators'
 
 export const DataTable = ({ data, file }) => {
   return !isValidData(data) || !isCSV(file) ? (
-    <div className='no-data'>file format is not correct</div>
+    <div className='error'>{errorMessage}</div>
   ) : (
     <table className='table'>
       <thead>
@@ -20,26 +34,76 @@ export const DataTable = ({ data, file }) => {
           <th>License states</th>
           <th>Expiration date</th>
           <th>License number</th>
+          <th>Dublicate with</th>
         </tr>
       </thead>
       <tbody>
-        {data.map(({ data }, index) => (
+        {data.map((item, index) => (
           <tr key={index}>
-            <td>{index + 1}</td>
-            <td>{data['Full Name']}</td>
-            <td className={classnames({ error: !isPhoneValid(data['Phone']) })}>
-              {isPhoneValid(data['Phone'])
-                ? isPhoneValid(data['Phone'])
-                : data['Phone']}
+            <td>{item.id}</td>
+            <td>{item['Full Name']}</td>
+            <td
+              className={classnames({ invalid: !isPhoneValid(item['Phone']) })}
+            >
+              {isPhoneValid(item['Phone'])
+                ? isPhoneValid(item['Phone'])
+                : item['Phone']}
             </td>
-            <td>{data['Email']}</td>
-            <td>{data['Age']}</td>
-            <td>{data['Experience']}</td>
-            <td>{data['Yearly Income']}</td>
-            <td>{data['Has children']}</td>
-            <td>{data['License states']}</td>
-            <td>{data['Expiration date']}</td>
-            <td>{data['License number']}</td>
+            <td
+              className={classnames({ invalid: !isEmailValid(item['Email']) })}
+            >
+              {item['Email']}
+            </td>
+            <td className={classnames({ invalid: !isAgeValid(item['Age']) })}>
+              {item['Age']}
+            </td>
+            <td
+              className={classnames({
+                invalid: !isExperienceValid(item['Experience'], item['Age']),
+              })}
+            >
+              {item['Experience']}
+            </td>
+            <td
+              className={classnames({
+                invalid: !isIncomeValid(item['Yearly Income']),
+              })}
+            >
+              {isIncomeValid(item['Yearly Income'])
+                ? isIncomeValid(item['Yearly Income'])
+                : item['Yearly Income']}
+            </td>
+            <td
+              className={classnames({
+                invalid: !isHasChildren(item['Has children']),
+              })}
+            >
+              {isHasChildren(item['Has children'])
+                ? isHasChildren(item['Has children'])
+                : item['Has children']}
+            </td>
+            <td
+              className={classnames({
+                invalid: !isStatesValid(item['License states']),
+              })}
+            >
+              {isStatesValid(item['License states'])}
+            </td>
+            <td
+              className={classnames({
+                invalid: !isExpDateValid(item['Expiration date']),
+              })}
+            >
+              {item['Expiration date']}
+            </td>
+            <td
+              className={classnames({
+                invalid: !isLicenseValid(item['License number']),
+              })}
+            >
+              {item['License number']}
+            </td>
+            <td>{isMatch(data, item)}</td>
           </tr>
         ))}
       </tbody>
